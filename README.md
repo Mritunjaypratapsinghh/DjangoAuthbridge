@@ -178,3 +178,13 @@ docker-compose logs microservice1
 - Implement scaling strategies for microservices and databases.
 - Add monitoring and logging tools (such as Prometheus, Grafana, or ELK stack).
 - Enhance security configurations for production environments.
+
+
+## Contributors
+
+This project was developed with equal contributions from:
+
+- **Mritunjay Pratap Singh** - [GitHub Profile](https://github.com/Mritunjaypratapsinghh)
+- **Mohd Sakib** - [GitHub Profile](https://github.com/Mohdsakib535)
+
+We are both actively contributing to this project and maintaining it together.
