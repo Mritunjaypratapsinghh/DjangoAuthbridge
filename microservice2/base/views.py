@@ -4,8 +4,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 import json
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+
 
 class LoginView(APIView):
+
     """Handle user login by verifying credentials with Keycloak."""
     
     def post(self, request):
@@ -52,3 +58,23 @@ class LoginView(APIView):
             return Response({'error': 'Invalid JSON'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+class PrivateResourceView(APIView):
+    # permission_classes = [IsAuthenticated]  # Ensures the user is authenticated
+
+    def get(self, request):
+        # Your business logic here
+        data = {
+            "message": "This is a private resource!",
+            "user": request.user.username  # You can access user information here
+        }
+        return Response(data)
+
+    def post(self, request):
+        # Handle POST requests to the private resource
+        data = request.data  # Get data from the request
+        # Your logic to process the data
+        return Response({"message": "Data received", "data": data})
