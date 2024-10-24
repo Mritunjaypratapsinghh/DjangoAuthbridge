@@ -1,6 +1,6 @@
 # DjangoAuthbridge: Django Microservices with Keycloak and Kerberos Authentication
 
-This project is a microservices architecture built using Django and Docker, integrated with Keycloak for centralized authentication and Kerberos for network authentication. The microservices communicate with their respective PostgreSQL databases, and NGINX is used as a reverse proxy.
+This project is a microservices architecture built using Django and Docker, integrated with Keycloak for centralized authentication (SSO) and Kerberos for network authentication. The microservices communicate with their respective PostgreSQL databases, and NGINX is used as a reverse proxy.
 
 ## Project Structure
 
@@ -33,7 +33,7 @@ This project is a microservices architecture built using Django and Docker, inte
 
 ## Services Overview
 
-### 1. **Keycloak** - Centralized Authentication
+### 1. **Keycloak** - Centralized Authentication (SSO)
 - **Keycloak** is an open-source identity and access management tool used for authentication and authorization. It manages user login for all microservices.
 - **Keycloak Database** (`keycloak_db`): A PostgreSQL instance that stores Keycloak data.
 
@@ -116,6 +116,48 @@ Environment variables for each service are defined in the `docker-compose.yml` f
 ## Persisting Data
 
 - PostgreSQL data is stored in the `config/postgres_data/` directory, ensuring that data persists even if the containers are stopped or removed.
+
+## SSO Integration with Keycloak
+
+To enable Single Sign-On (SSO) with Keycloak, follow these steps:
+
+### 1. Keycloak Setup
+- **Install and Configure Keycloak**:
+  - Deploy Keycloak using Docker (as per your existing setup in the `docker-compose.yml`).
+  - Access the Keycloak admin console at `http://localhost:8080/auth` and log in using the admin credentials.
+
+- **Create a Realm**:
+  - In the Keycloak Admin Console, click **Add Realm**, name it (e.g., `myrealm`), and save.
+
+- **Create Clients for Each Microservice**:
+  - In Keycloak, go to the **Clients** tab and click **Create** for each microservice (e.g., `microservice1`, `microservice2`, `microservice3`).
+  - Set **Client Protocol** to `openid-connect` and **Access Type** to `confidential`.
+  - Save the client and copy the **Client Secret** (you will need this in Django settings).
+
+- **Create Users**:
+  - Go to the **Users** section, click **Add User**, and create a user for each service.
+
+### 2. Integrating Keycloak with Django Microservices
+- Install the necessary Python package for Keycloak integration:
+  ```bash
+  pip install django-keycloak-auth
+  ```
+
+- Update the Django settings for each microservice (`settings.py`):
+  - Add Keycloak configurations such as:
+    ```python
+    KEYCLOAK_CONFIG = {
+        'KEYCLOAK_SERVER_URL': 'http://localhost:8080/auth',
+        'KEYCLOAK_CLIENT_ID': 'microservice1',
+        'KEYCLOAK_REALM': 'myrealm',
+        'KEYCLOAK_CLIENT_SECRET': 'your-client-secret-here',
+        'KEYCLOAK_OPENID_CONFIG': '/realms/myrealm/.well-known/openid-configuration',
+    }
+    ```
+
+### 3. Testing the SSO Integration
+- Start all services using `docker-compose up`.
+- Visit each microservice URL, and you will be redirected to Keycloak for authentication.
 
 ## Troubleshooting
 
