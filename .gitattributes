@@ -1,0 +1,6 @@
+# Handle all files ending with .conf and .opts
+*.conf text eol=lf
+*.opts text eol=lf
+
+# Postgres-specific files
+PG_VERSION text eol=lf

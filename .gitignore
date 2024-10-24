@@ -1,0 +1,84 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.sqlite3
+
+# Django
+*.log
+*.pot
+*.py[cod]
+*.sqlite3
+*.env
+.env/
+db.sqlite3
+/media
+/static
+/staticfiles
+/node_modules
+migrations/
+celerybeat-schedule
+
+# React/Node
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+build/
+coverage/
+
+# Docker
+*.pid
+*.db
+*.sqlite3
+*.log
+docker-compose.override.yml
+
+# VSCode settings
+.vscode/
+
+# MacOS files
+.DS_Store
+
+# Virtual environment
+venv/
+.env/
+
+# Ignore PostgreSQL data files
+config/postgres_data/
+
+# Ignore virtual environments
+venv/
+.env/
+
+# Ignore Docker-related files
+**/Dockerfile
+**/.dockerignore
+
+# Ignore compiled Python files
+*.pyc
+__pycache__/
+
+# Ignore log files and temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore node_modules (if using React or Node.js)
+node_modules/
+
+# Ignore database files (SQLite or other local databases)
+*.sqlite3
+
+# Ignore static and media files (Django)
+/staticfiles/
+/media/
+/static/
+
+# Ignore Django migrations
+*/migrations/
+
+# Ignore IDE settings and local configs
+.vscode/
+.idea/

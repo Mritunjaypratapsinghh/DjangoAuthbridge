@@ -1,0 +1,178 @@
+
+services:
+
+  # PostgreSQL for Keycloak
+  keycloak_db:
+    container_name: keycloak_db
+    image: postgres
+    restart: always
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_PASSWORD: admin@123
+      POSTGRES_DB: keycloak_db
+      POSTGRES_USER: admin
+    volumes:
+      - ./postgres_data/keycloak:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # Keycloak service for authentication
+  keycloak:
+    container_name: keycloak_con
+    image: quay.io/keycloak/keycloak:15.0.2
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak_db
+      DB_DATABASE: keycloak_db
+      DB_USER: admin
+      DB_PASSWORD: admin@123
+    depends_on:
+      - keycloak_db
+    networks:
+      - app-network
+
+  # MySQL for Microservice 1
+  postdb:
+    container_name: postdb
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin@123
+      POSTGRES_DB: microservice1_db  # Fixed typo here
+      POSTGRES_USER: admin
+    volumes:
+      - ./postgres_data:/usr/local/pgsql/data
+    networks:
+      - app-network
+
+  # MySQL for Microservice 2
+  postdb2:
+    container_name: postdb2
+    image: postgres  # Changed from postgres2 to postgres
+    restart: always
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_PASSWORD: admin@123
+      POSTGRES_DB: microservice2_db  # Fixed typo here
+      POSTGRES_USER: admin
+    volumes:
+      - ./postgres_data:/usr/local/pgsql/data
+    networks:
+      - app-network
+
+  # MySQL for Microservice 3
+  postdb3:
+    container_name: postdb3
+    image: postgres
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_PASSWORD: admin@123
+      POSTGRES_DB: microservice3_db  # Fixed typo here
+      POSTGRES_USER: admin
+    volumes:
+      - ./postgres_data:/usr/local/pgsql/data
+    networks:
+      - app-network
+
+  # Microservice 1 (Django)
+  microservice1:
+    container_name: microservice1_con
+    build:
+      context: ..
+      dockerfile: ./microservice1/Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - ../microservice1:/app
+    depends_on:
+      - postdb
+    environment:
+      DB_HOST: postdb
+      DB_PORT: 5432
+      DB_NAME: microservice1_db
+      DB_USER: admin
+      DB_PASSWORD: admin@123
+    networks:
+      - app-network
+
+  # Microservice 2 (Django)
+  microservice2:
+    container_name: microservice2_con
+    build:
+      context: ..
+      dockerfile: ./microservice2/Dockerfile
+    ports:
+      - "8002:8000"
+    volumes:
+      - ../microservice2:/app
+    depends_on:
+      - postdb2
+    environment:
+      DB_HOST: postdb2
+      DB_PORT: 5432
+      DB_NAME: microservice2_db
+      DB_USER: admin
+      DB_PASSWORD: admin@123
+    networks:
+      - app-network
+
+  # Microservice 3 (Django)
+  microservice3:
+    container_name: microservice3_con
+    build:
+      context: ..
+      dockerfile: ./microservice3/Dockerfile
+    ports:
+      - "8003:8000"
+    volumes:
+      - ../microservice3:/app
+    depends_on:
+      - postdb3
+    environment:
+      DB_HOST: postdb3
+      DB_PORT: 5432
+      DB_NAME: microservice3_db
+      DB_USER: admin
+      DB_PASSWORD: admin@123
+    networks:
+      - app-network
+
+    # Kerberos KDC service
+  kerberos_kdc:
+    container_name: kerberos_kdc
+    build:
+      context: ./kerberos  # Path to the directory with your Dockerfile
+    environment:
+      REALM: REALM1.LOCAL
+      KDC_DOMAIN: localhost
+      KRB5_KEYTAB: /config/keytabs/microservice1.keytab
+
+    volumes:
+      - ./kerberos/krb5_data:/var/lib/kerberos/krb5kdc
+      - ./kerberos/krb5_conf/krb5.conf:/etc/krb5.conf
+      - ./keytabs:/config/keytabs
+    ports:
+      - "88:88"
+      - "749:749"
+    networks:
+      - app-network
+
+
+
+
+
+# Define the network
+networks:
+  app-network:
+    driver: bridge
