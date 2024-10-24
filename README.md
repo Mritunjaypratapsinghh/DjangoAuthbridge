@@ -182,9 +182,7 @@ docker-compose logs microservice1
 
 ## Contributors
 
-| ![Mritunjay Pratap Singh](https://github.com/Mritunjaypratapsinghh.png?size=100) | ![Mohd Sakib](https://github.com/Mohdsakib535.png?size=100) |
-|:---------------------------------------------:|:---------------------------------------------:|
-| **Mritunjay Pratap Singh**  | **Mohd Sakib**  |
-| [GitHub Profile](https://github.com/Mritunjaypratapsinghh) | [GitHub Profile](https://github.com/Mohdsakib535) |
+| [<img src="https://github.com/Mritunjaypratapsinghh.png?size=100" width="100px;"/><br /><sub><b>Mritunjay Pratap Singh</b></sub>](https://github.com/Mritunjaypratapsinghh) | [<img src="https://github.com/Mohdsakib535.png?size=100" width="100px;"/><br /><sub><b>Mohd Sakib</b></sub>](https://github.com/Mohdsakib535) |
+| :---: | :---: |
 
 
