@@ -178,7 +178,7 @@ docker-compose logs microservice1
 - Implement scaling strategies for microservices and databases.
 - Add monitoring and logging tools (such as Prometheus, Grafana, or ELK stack).
 - Enhance security configurations for production environments.
-
+ 
 
 ## Contributors
 
